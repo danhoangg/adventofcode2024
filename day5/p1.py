@@ -15,7 +15,7 @@ while i < len(lines):
     a = list(map(int, lines[i].split(',')))
 
     for j in range(len(a) - 1, 0, -1):
-        if any(i in adj[a[j]] for i in a[:j]):
+        if any(k in adj[a[j]] for k in a[:j]):
             break
     else:
         res += a[len(a) // 2]

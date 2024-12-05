@@ -1,3 +1,5 @@
+import collections
+
 with open('in', 'r') as f:
     lines = f.read().split('\n')
 
@@ -12,28 +14,40 @@ i += 1
 
 def ordered(a):
     for j in range(len(a) - 1, 0, -1):
-        for k in range(j):
-            if a[k] in adj[a[j]]:
-                return False, j, k
-    return True, -1, -1
+        if any(k in adj[a[j]] for k in a[:j]):
+            return False
+    return True
+
+def topological_sort(a):
+    f_adj = defaultdict(list)
+    for u in a:
+        if u in adj:
+            f_adj[u] = [nei for nei in adj[u] if nei in a]
+
+    degree = {u: 0 for u in a}
+    for u in f_adj:
+        for nei in f_adj[u]:
+            degree[nei] += 1
+
+    q = collections.deque([n for n in a if degree[n] == 0])
+    sorted = []
+    while q:
+        u = q.popleft()
+        sorted.append(u)
+        for v in f_adj[u]:
+            degree[v] -= 1
+            if degree[v] == 0:
+                q.append(v)
+
+    return sorted
 
 res = 0
 while i < len(lines):
     a = list(map(int, lines[i].split(',')))
 
-    o, j, k = ordered(a)
-    if o:
-        i += 1
-        continue
+    if not ordered(a):
+        res += topological_sort(a)[len(a) // 2]
 
-    while not o:
-        t = a[j]
-        a[j] = a[k]
-        a[k] = t
-
-        o, j, k = ordered(a)
-
-    res += a[len(a) // 2]
     i += 1
 
 print(res)

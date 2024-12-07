@@ -3,10 +3,7 @@ with open('in', 'r') as f:
 
 def dfs(cur, curlist, t):
     if not curlist:
-        if cur == t:
-            return True
-        else:
-            return False
+        return cur == t
 
     return dfs(cur * curlist[0], curlist[1:], t) or dfs(cur + curlist[0], curlist[1:], t)
 

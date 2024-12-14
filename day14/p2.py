@@ -34,7 +34,7 @@ for j in tqdm(range(10000)):
 
     if not line_exists(grid):
         continue
-    tree = f'TREE {j}\n'
+    tree = f'TREE {j + 1}\n'
     for r in range(rows):
         for c in range(cols):
             tree += grid[r][c]
